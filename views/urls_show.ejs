@@ -21,6 +21,18 @@
             <%= id %>
           </a>
         </p>
+        <form action="/urls/<%= id %>/update" method="POST">
+          <div class="form-group">
+            <label for="longURL">EDIT</label>
+            <div class="form-group">
+              <label for="longURL">New URL:</label>
+              <input type="text" class="form-control" id="longURL" name="newLongURL" value="<%= longURL %>" required>
+            </div>
+
+          </div>
+          <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+
       </div>
       <div class="card-footer text-muted"></div>
     </div>
