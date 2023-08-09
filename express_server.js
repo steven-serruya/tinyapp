@@ -76,6 +76,11 @@ app.get("/hello", (req, res) => {
 
 app.get("/urls", (req, res) => {
   const user = getUserById(req.cookies.userId, users);
+
+  if (!user) {
+    return res.redirect("/login");
+  }
+
   const templateVars = {
     user: user,
     urls: urlDatabase
@@ -161,6 +166,11 @@ app.post("/logout", (req, res) => {
 
 app.get("/register", (req, res) => {
   const user = getUserById(req.cookies.userId, users);
+
+  if (req.cookies.userId) {
+    return res.redirect("/urls");
+  }
+
   res.render("user_registration", { user: user });
 });
 
@@ -190,6 +200,10 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
+  if (req.cookies.userId) {
+    return res.redirect("/urls");
+  }
+
   res.render("login");
 });
 
