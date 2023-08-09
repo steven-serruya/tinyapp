@@ -125,3 +125,26 @@ app.post("/logout", (req, res) => {
   res.clearCookie("username");
   res.redirect("/urls");
 });
+app.get("/register", (req, res) => {
+  res.render("user_registration");
+});
+
+
+app.post("/register", (req, res) => {
+  // Here, you'd typically handle the registration logic.
+  // For example, save the email and password to a database.
+  // Ensure you never save plain-text passwords; always hash them before saving.
+
+  const email = req.body.email;
+  const password = req.body.password;
+
+  // Sample logic (not comprehensive):
+  // 1. Check if the email already exists.
+  // 2. If not, hash the password.
+  // 3. Save the user to the database.
+  // 4. Redirect to another page or set a cookie to log them in.
+
+  res.redirect("/urls");
+});
+
+
