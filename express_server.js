@@ -133,13 +133,7 @@ app.post("/urls/:id/update", (req, res) => {
   }
 });
 
-app.get("/urls", (req, res) => {
-  const templateVars = {
-    user: user,
-    urls: urlDatabase
-  };
-  res.render("urls_index", templateVars);
-});
+
 
 app.post("/login", (req, res) => {
 
@@ -161,7 +155,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie(" user_id");
+  res.clearCookie("user_id");
   res.redirect("/login");
 });
 app.get("/register", (req, res) => {
