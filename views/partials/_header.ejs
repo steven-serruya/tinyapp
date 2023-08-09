@@ -11,19 +11,18 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
 
-      <% if (username) { %>
+      <% if (typeof user !=='undefined' && user) { %>
         <span class="navbar-text text-light mr-3">
-          Logged in as: <%= username %>
+          Logged in as: <%= user.email %>
         </span>
         <form action="/logout" method="post" class="form-inline ml-auto">
           <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Logout</button>
         </form>
         <% } else { %>
-          <form action="/login" method="post" class="form-inline ml-auto">
-            <input class="form-control mr-sm-2 bg-dark text-light border-0" type="text" name="username"
-              placeholder="Username" required>
-            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Login</button>
-          </form>
+          <div class="ml-auto d-flex align-items-center">
+            <a href="/login" class="text-primary mr-3">Login</a>
+            <a href="/register" class="text-primary">Register</a>
+          </div>
           <% } %>
     </div>
   </nav>

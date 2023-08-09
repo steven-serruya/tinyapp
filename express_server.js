@@ -7,6 +7,19 @@ const cookieParser = require('cookie-parser');
 
 app.use(cookieParser());
 
+const users = {
+  userRandomID: {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur",
+  },
+  user2RandomID: {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk",
+  },
+};
+
 const generateRandomString = () => {
   const alphanumericChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = "";
@@ -17,28 +30,32 @@ const generateRandomString = () => {
   return result;
 };
 
+const getUserById = (id, database) => {
+  return database[id];
+};
+const getUserByEmail = (email, database) => {
+  for (let userId in database) {
+    if (database[userId].email === email) {
+      return database[userId];
+    }
+  }
+  return null;
+};
+
+
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 app.use(express.urlencoded({ extended: true }));
 
-app.post("/urls", (req, res) => {
-  console.log(req.body);
-  const longURL = req.body.longURL;
-  const shortURL = generateRandomString();
-  urlDatabase[shortURL] = longURL;
-  console.log(urlDatabase);
-  res.redirect(`/urls/${shortURL}`);
-});
+
 
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
-});
+
 app.get("/u/:id", (req, res) => {
   const shortURL = req.params.id;
   const longURL = urlDatabase[shortURL];
@@ -58,28 +75,39 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
+  const user = getUserById(req.cookies.userId, users);
   const templateVars = {
-    username: req.cookies.username,
+    user: user,
     urls: urlDatabase
   };
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
+  const user = getUserById(req.cookies.userId, users);
   const templateVars = {
-    username: req.cookies.username,
+    user: user,
     urls: urlDatabase
   };
   res.render("urls_new", templateVars);
 });
 
 app.get("/urls/:id", (req, res) => {
+  const user = getUserById(req.cookies.userId, users);
   const templateVars = {
+    user: user,
     id: req.params.id,
     longURL: urlDatabase[req.params.id],
-    username: req.cookies.username
   };
   res.render("urls_show", templateVars);
+});
+app.post("/urls", (req, res) => {
+  console.log(req.body);
+  const longURL = req.body.longURL;
+  const shortURL = generateRandomString();
+  urlDatabase[shortURL] = longURL;
+  console.log(urlDatabase);
+  res.redirect(`/urls/${shortURL}`);
 });
 app.post("/urls/:id", (req, res) => {
   const newLongURL = req.body.newLongURL;
@@ -107,44 +135,69 @@ app.post("/urls/:id/update", (req, res) => {
 
 app.get("/urls", (req, res) => {
   const templateVars = {
-    username: req.cookies.username,
+    user: user,
     urls: urlDatabase
   };
   res.render("urls_index", templateVars);
 });
 
 app.post("/login", (req, res) => {
-  const username = req.body.username;
-
-
-  res.cookie("username", username);
-  res.redirect("/");
-});
-
-app.post("/logout", (req, res) => {
-  res.clearCookie("username");
-  res.redirect("/urls");
-});
-app.get("/register", (req, res) => {
-  res.render("user_registration");
-});
-
-
-app.post("/register", (req, res) => {
-  // Here, you'd typically handle the registration logic.
-  // For example, save the email and password to a database.
-  // Ensure you never save plain-text passwords; always hash them before saving.
 
   const email = req.body.email;
   const password = req.body.password;
+  const existingUser = getUserByEmail(email, users);
 
-  // Sample logic (not comprehensive):
-  // 1. Check if the email already exists.
-  // 2. If not, hash the password.
-  // 3. Save the user to the database.
-  // 4. Redirect to another page or set a cookie to log them in.
+  if (!existingUser) {
+    return res.status(403).send("Email cannot be found!");
 
+  }
+  if (password !== existingUser.password) {
+    return res.status(403).send("Incorrect password!");
+  }
+
+
+  res.cookie("userId", existingUser.id);
   res.redirect("/urls");
 });
 
+app.post("/logout", (req, res) => {
+  res.clearCookie(" user_id");
+  res.redirect("/login");
+});
+app.get("/register", (req, res) => {
+  const user = getUserById(req.cookies.userId, users);
+  res.render("user_registration", { user: user });
+});
 
+
+
+app.post("/register", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  if (!email || !password) {
+    return res.status(400).send("Email and password are required!");
+  }
+
+  const existingUser = getUserByEmail(email, users);
+  if (existingUser) {
+    return res.status(400).send("Email is already in use!");
+  }
+  const userId = generateRandomString();
+  users[userId] = {
+    id: userId,
+    email: email,
+    password: password
+  };
+
+  res.cookie("userId", userId);
+  console.log(users);
+  res.redirect("/urls");
+});
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}!`);
+});
