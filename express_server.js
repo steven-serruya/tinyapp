@@ -155,9 +155,10 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("user_id");
+  res.clearCookie("userId");
   res.redirect("/login");
 });
+
 app.get("/register", (req, res) => {
   const user = getUserById(req.cookies.userId, users);
   res.render("user_registration", { user: user });
