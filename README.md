@@ -7,7 +7,7 @@
 - [Features](#features)
 - [Dependencies](#dependencies)
 - [Contributing](#contributing)
-- [License](#license)
+
 
 ## Installation
 1- Clone the repository: 
@@ -19,21 +19,51 @@ npm install
 3-Run the server:
 npm start
 
-4-Open your web browser and access the application at: 
-http://localhost:8080.
 
+4. Open your web browser and access the application at:
+[http://localhost:8080](http://localhost:8080)
+
+---
 
 ## Usage
-1- Register or log in to create an account.
-2- Once logged in, you can create new shortened URLs.
-3- Manage your URLs by updating or deleting them.
-4- Access your shortened URLs via /u/:id.
+
+Here's how you can use the Express URL Shortener:
+
+1. Register or log in to create an account.
+2. Once logged in, you can create new shortened URLs.
+3. Manage your URLs by updating or deleting them.
+4. Access your shortened URLs via `/u/:id`.
+
+---
 
 ## Features
-1- User registration and authentication.
-2- Create, update, and delete shortened URLs.
-3- User-specific URL management.
-4- Cookie-based user authentication and session management.
+
+The Express URL Shortener project comes with the following features:
+
+1. User registration and authentication for secure access.
+2. Create, update, and delete shortened URLs easily.
+3. User-specific URL management for better organization.
+4. Utilizes cookie-based user authentication and session management.
+
+---
+
+## Dependencies
+
+The following dependencies are required for this project:
+
+1. [Node.js](https://nodejs.org/)
+2. [Express.js](https://expressjs.com/)
+3. [EJS (Embedded JavaScript)](https://ejs.co/) for efficient templating.
+4. [cookie-parser](https://www.npmjs.com/package/cookie-parser) for handling cookies.
+
+---
+
+## Contributing
+
+Contributions to this project are welcome. Feel free to fork the repository and submit pull requests.
+
+Made by Steven Serruya
+
 
 
 ## Dependencies
@@ -41,3 +71,7 @@ http://localhost:8080.
 2- Express.js
 3- EJS (Embedded JavaScript) for templating
 4- Cookie-parser for handling cookies
+
+
+## Contributing
+Made by Steven Serruya

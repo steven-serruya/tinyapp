@@ -1,3 +1,5 @@
+// Create an object to store user information
+
 const users = {
   userRandomID: {
     id: "userRandomID",
@@ -10,6 +12,7 @@ const users = {
     password: "dishwasher-funk",
   },
 };
+// Create an empty object to store URL information
 
 const urlDatabase = {};
 
@@ -25,6 +28,7 @@ const urlDatabase = {};
   },
 };
 */
+// Export the users and urlDatabase objects for use in other files
 
 module.exports = {
   users,

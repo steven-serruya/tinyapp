@@ -1,4 +1,3 @@
-// helpers.js
 
 // here is the function to generate a random string:
 const generateRandomString = () => {
@@ -24,7 +23,7 @@ const getUserByEmail = (email, database) => {
   return null;
 };
 
-
+//export functions generateRandomString, getUserById and getUserByEmail
 module.exports = {
   generateRandomString,
   getUserById,
