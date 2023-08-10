@@ -9,6 +9,7 @@
 </head>
 
 <body>
+  <!-- Include the header partial here -->
   <%- include('partials/_header') %>
 
     <div class="card text-center">
@@ -26,10 +27,11 @@
             <label for="longURL">EDIT</label>
             <div class="form-group">
               <label for="longURL">New URL:</label>
+              <!-- Input field for new long URL -->
               <input type="text" class="form-control" id="longURL" name="newLongURL" value="<%= longURL %>" required>
             </div>
-
           </div>
+          <!-- Submit button to update the URL -->
           <button type="submit" class="btn btn-primary">Update</button>
         </form>
 

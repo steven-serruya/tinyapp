@@ -10,15 +10,18 @@
         <a class="nav-item nav-link" href="/urls">My URLs</a>
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
-
+      <!-- Check if the user is logged in -->
       <% if (typeof user !=='undefined' && user) { %>
         <span class="navbar-text text-light mr-3">
+          <!-- Display user email and logout button -->
           Logged in as: <%= user.email %>
         </span>
         <form action="/logout" method="post" class="form-inline ml-auto">
           <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Logout</button>
         </form>
         <% } else { %>
+          <!-- If not logged in, display login and registration links -->
+
           <div class="ml-auto d-flex align-items-center">
             <a href="/login" class="text-primary mr-3">Login</a>
             <a href="/register" class="text-primary">Register</a>

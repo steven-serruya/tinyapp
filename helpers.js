@@ -1,3 +1,4 @@
+const { users, urlDatabase } = require("./database");
 
 // here is the function to generate a random string:
 const generateRandomString = () => {
@@ -23,9 +24,20 @@ const getUserByEmail = (email, database) => {
   return null;
 };
 
+function urlsForUser(userId) {
+  const userURLs = {};
+  for (const shortURL in urlDatabase) {
+    if (urlDatabase[shortURL].userID === userId) {
+      userURLs[shortURL] = urlDatabase[shortURL];
+    }
+  }
+  return userURLs;
+}
+
 //export functions generateRandomString, getUserById and getUserByEmail
 module.exports = {
   generateRandomString,
   getUserById,
   getUserByEmail,
+  urlsForUser
 };

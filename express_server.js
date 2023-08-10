@@ -3,7 +3,7 @@
 const express = require("express");
 const app = express();
 const PORT = 8080;
-const { generateRandomString, getUserById, getUserByEmail } = require("./helpers");
+const { generateRandomString, getUserById, getUserByEmail, urlsForUser } = require("./helpers");
 const { users, urlDatabase } = require("./database");
 
 
@@ -20,7 +20,14 @@ app.use(express.urlencoded({ extended: true }));
 // Root route
 
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  // Check if the user is logged in
+  if (getUserById(req.cookies.userId, users)) {
+    // If logged in, redirect to /urls
+    return res.redirect("/urls");
+  } else {
+    // If not logged in, redirect to /login
+    return res.redirect("/login");
+  }
 });
 
 // Redirect short URLs to their corresponding long URLs
@@ -36,18 +43,6 @@ app.get("/u/:id", (req, res) => {
   }
 });
 
-// Route to return the URL database in JSON format
-
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
-
-// Route to display a simple HTML page
-
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
-
 // Display URLs associated with a logged-in user
 
 app.get("/urls", (req, res) => {
@@ -58,7 +53,8 @@ app.get("/urls", (req, res) => {
     return res.render("urls_not_logged_in");
   }
 
-  // Gather URLs associated with the user
+  // Filter URLs to show only those associated with the logged-in user
+
   const userURLs = urlsForUser(user.id);
   for (const shortURL in urlDatabase) {
     if (urlDatabase[shortURL].userID === user.id) {
@@ -71,6 +67,20 @@ app.get("/urls", (req, res) => {
   };
   res.render("urls_index", templateVars);
 });
+
+// Route to return the URL database in JSON format
+
+app.get("/urls.json", (req, res) => {
+  res.json(urlDatabase);
+});
+
+// Route to display a simple HTML page
+
+app.get("/hello", (req, res) => {
+  res.send("<html><body>Hello <b>World</b></body></html>\n");
+});
+
+
 
 // Route to display a form for creating a new URL
 
@@ -93,14 +103,18 @@ app.get("/urls/:id", (req, res) => {
   const shortURL = req.params.id;
   const longURL = urlDatabase[shortURL];
 
-  // Check if the user is logged in and authorized to view the URL
+  // Check if the user is logged in
 
   if (!user) {
-    return res.render("urls_not_logged_in");
+    return res.status(401).send("<html><body>You must be logged in to access this page.</body></html>");
+
   }
 
+  // Check if the URL exists and the user is authorized to view it
+
   if (!longURL || longURL.userID !== user.id) {
-    return res.status(404).render("urls_not_found");
+    return res.status(404).send("<html><body>URL not found!</body></html>");
+
   }
   const templateVars = {
     user: user,
