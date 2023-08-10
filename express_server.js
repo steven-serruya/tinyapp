@@ -5,24 +5,33 @@ const app = express();
 const PORT = 8080;
 const { generateRandomString, getUserById, getUserByEmail, urlsForUser } = require("./helpers");
 const { users, urlDatabase } = require("./database");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs"); // Import bcriptjs
+const cookieSession = require("cookie-session"); // Import cookie-session
 
 
 //set the view engine to EJS 
 app.set("view engine", "ejs");
-const cookieParser = require('cookie-parser');
-app.use(cookieParser());
+// const cookieParser = require('cookie-parser');
+// app.use(cookieParser());
 
 // Middleware to parse URL-encoded data in request bodies
 
+
+
+
+// Use cookie-session middleware
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2'] // Provide secret keys for encryption
+}));
+
 app.use(express.urlencoded({ extended: true }));
-
-
 // Root route
 
 app.get("/", (req, res) => {
   // Check if the user is logged in
-  if (getUserById(req.cookies.userId, users)) {
+  if (getUserById(req.session.userId, users)) {
     // If logged in, redirect to /urls
     return res.redirect("/urls");
   } else {
@@ -48,10 +57,11 @@ app.get("/u/:id", (req, res) => {
 
 app.get("/urls", (req, res) => {
   // Get user using their cookie-based userId
-  const user = getUserById(req.cookies.userId, users);
+  const user = getUserById(req.session.userId, users);
 
   if (!user) {
-    return res.render("urls_not_logged_in");
+    const redirectToLogin = encodeURIComponent("/login");
+    return res.redirect(`/login?redirectTo=${redirectToLogin}`);
   }
 
   // Filter URLs to show only those associated with the logged-in user
@@ -86,7 +96,7 @@ app.get("/hello", (req, res) => {
 // Route to display a form for creating a new URL
 
 app.get("/urls/new", (req, res) => {
-  const user = getUserById(req.cookies.userId, users);
+  const user = getUserById(req.session.userId, users);
   if (!user) {
     return res.redirect("/login");
   }
@@ -100,7 +110,7 @@ app.get("/urls/new", (req, res) => {
 // Display details of a specific URL
 
 app.get("/urls/:id", (req, res) => {
-  const user = getUserById(req.cookies.userId, users);
+  const user = getUserById(req.session.userId, users);
   const shortURL = req.params.id;
   const longURL = urlDatabase[shortURL];
 
@@ -128,7 +138,7 @@ app.get("/urls/:id", (req, res) => {
 // Create a new short URL
 
 app.post("/urls", (req, res) => {
-  const user = getUserById(req.cookies.userId, users);
+  const user = getUserById(req.session.userId, users);
 
   if (!user) {
     return res.status(403).send("You must be logged in to create URLs.");
@@ -137,7 +147,7 @@ app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = {
     longURL: req.body.longURL,
-    userID: req.cookies.userId,
+    userID: req.session.userId,
   };
 
   res.redirect(`/urls/${shortURL}`);
@@ -177,6 +187,15 @@ app.post("/urls/:id/update", (req, res) => {
   }
 });
 
+// User login page
+
+app.get("/login", (req, res) => {
+  if (getUserById(req.session.userId, users)) {
+    return res.redirect("/urls");
+  }
+
+  res.render("login");
+});
 
 // User login
 
@@ -197,14 +216,14 @@ app.post("/login", (req, res) => {
   }
 
 
-  res.cookie("userId", existingUser.id);   // Set a cookie for the logged-in user
+  req.session.userId = existingUser.id; // Set the user_id in the session
   res.redirect("/urls"); //redirect to "/urls"
 });
 
 // User logout
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("userId");   // Clear cookie
+  req.session = null; // Clear the session
   res.redirect("/login"); //redirect to "login"
 });
 
@@ -212,7 +231,7 @@ app.post("/logout", (req, res) => {
 // User registration page
 
 app.get("/register", (req, res) => {
-  const user = getUserById(req.cookies.userId, users);
+  const user = getUserById(req.session.userId, users);
 
   if (user) {
     return res.redirect("/urls");
@@ -252,15 +271,7 @@ app.post("/register", (req, res) => {
   res.redirect("/urls"); //redirect to "/urls"
 });
 
-// User login page
 
-app.get("/login", (req, res) => {
-  if (getUserById(req.cookies.userId, users)) {
-    return res.redirect("/urls");
-  }
-
-  res.render("login");
-});
 
 // Start the server
 
