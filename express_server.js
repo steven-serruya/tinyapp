@@ -11,16 +11,8 @@ const cookieSession = require("cookie-session"); // Import cookie-session
 
 //set the view engine to EJS 
 app.set("view engine", "ejs");
-// const cookieParser = require('cookie-parser');
-// app.use(cookieParser());
 
-// Middleware to parse URL-encoded data in request bodies
-
-
-
-
-// Use cookie-session middleware
-
+// use of cookieSession
 app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2'] // Provide secret keys for encryption
