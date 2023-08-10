@@ -5,6 +5,7 @@ const app = express();
 const PORT = 8080;
 const { generateRandomString, getUserById, getUserByEmail, urlsForUser } = require("./helpers");
 const { users, urlDatabase } = require("./database");
+const bcrypt = require("bcryptjs");
 
 
 //set the view engine to EJS 
@@ -190,7 +191,8 @@ app.post("/login", (req, res) => {
     return res.status(403).send("Email cannot be found!");
 
   }
-  if (password !== existingUser.password) {
+  // Compare the provided password with the hashed password using bcrypt
+  if (!bcrypt.compareSync(password, existingUser.password)) {
     return res.status(403).send("Incorrect password!");
   }
 
@@ -234,13 +236,15 @@ app.post("/register", (req, res) => {
     return res.status(400).send("Email is already in use!");
   }
 
-  // Create a new user and set a cookie
+  // Hash the password using bcrypt
+  const hashedPassword = bcrypt.hashSync(password, 10);
 
+  // Create a new user and save the hashed password
   const userId = generateRandomString();
   users[userId] = {
     id: userId,
     email: email,
-    password: password
+    password: hashedPassword
   };
 
   res.cookie("userId", userId);
