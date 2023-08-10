@@ -31,10 +31,10 @@
                 <%= id %>
               </td>
               <td>
-                <%= urls[id] %>
+                <%= urls[id].longURL %>
               </td>
               <td>
-                <form action="/urls/<%= id %>/update" method="post">
+                <form action="/urls/<%= id %>" method="GET">
                   <button style="background-color: white; border: 2px solid blue; color: blue;"
                     type="submit">Edit</button>
 
