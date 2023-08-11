@@ -53,7 +53,7 @@ app.get("/urls", (req, res) => {
 
   if (!user) {
     const redirectToLogin = encodeURIComponent("/login");
-    return res.redirect(`/login?redirectTo=${redirectToLogin}`);
+    return res.render("error", { errorMessage: "You must be logged in to access this page." });
   }
 
   // Filter URLs to show only those associated with the logged-in user
@@ -260,7 +260,7 @@ app.post("/register", (req, res) => {
 
   res.cookie("userId", userId);
   console.log(users);
-  res.redirect("/urls"); //redirect to "/urls"
+  res.redirect("/login"); //redirect to "/urls"
 });
 
 
