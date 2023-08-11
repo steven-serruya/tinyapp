@@ -79,4 +79,7 @@ Made by Steven Serruya
 Made by Steven Serruya
 
 ## Final Product
-[Screenshot of Login Page] (https://github.com/steven-serruya/tinyapp/blob/master/docs/header_with_no_login.png)
+[Screenshot of Login Page](https://github.com/steven-serruya/tinyapp/blob/master/docs/header_with_no_login.png)
+[Screenshot of Register Page](https://github.com/steven-serruya/tinyapp/blob/master/docs/Register_page.png)
+[Screenshot of URL Index Page](https://github.com/steven-serruya/tinyapp/blob/master/docs/URl_list.png)
+[Screenshot of URL Update Page](https://github.com/steven-serruya/tinyapp/blob/master/docs/URL_update.png)
