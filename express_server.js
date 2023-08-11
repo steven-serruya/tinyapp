@@ -53,7 +53,7 @@ app.get("/urls", (req, res) => {
 
   if (!user) {
     const redirectToLogin = encodeURIComponent("/login");
-    return res.render("error", { errorMessage: "You must be logged in to access this page." });
+    return res.render("error_logged_in", { errorMessage: "You must be logged in to access this page." });
   }
 
   // Filter URLs to show only those associated with the logged-in user
@@ -109,14 +109,14 @@ app.get("/urls/:id", (req, res) => {
   // Check if the user is logged in
 
   if (!user) {
-    return res.status(401).send("<html><body>You must be logged in to access this page.</body></html>");
+    return res.render("error_logged_in", { errorMessage: "You must be logged in to access this page." });
 
   }
 
   // Check if the URL exists and the user is authorized to view it
 
   if (!longURL || longURL.userID !== user.id) {
-    return res.status(404).send("<html><body>URL not found!</body></html>");
+    return res.render("error_url_not_exist", { errorMessage: "The URL you are looking for does not exist" });
 
   }
   const templateVars = {
@@ -239,12 +239,12 @@ app.post("/register", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   if (!email || !password) {
-    return res.status(400).send("Email and password are required!");
+    return res.render("error_email_password_req", { errorMessage: "Email and password are required!" });
   }
 
   const existingUser = getUserByEmail(email, users);
   if (existingUser) {
-    return res.status(400).send("Email is already in use!");
+    return res.render("error_email_in_use", { errorMessage: "Email is already in use!" });
   }
 
   // Hash the password using bcrypt
