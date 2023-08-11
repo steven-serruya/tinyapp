@@ -83,3 +83,4 @@ Made by Steven Serruya
 [Screenshot of Register Page](https://github.com/steven-serruya/tinyapp/blob/master/docs/Register_page.png)
 [Screenshot of URL Index Page](https://github.com/steven-serruya/tinyapp/blob/master/docs/URl_list.png)
 [Screenshot of URL Update Page](https://github.com/steven-serruya/tinyapp/blob/master/docs/URL_update.png)
+[Screenshot of logged in header](https://github.com/steven-serruya/tinyapp/blob/master/docs/header_with_login.png)
