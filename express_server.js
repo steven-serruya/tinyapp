@@ -228,7 +228,7 @@ app.get("/register", (req, res) => {
   const user = getUserById(req.session.userId, users);
 
   if (user) {
-    return res.redirect("/urls");
+    return res.redirect("/urls"); // Redirect to /urls if user is logged in
   }
 
   res.render("user_registration", { user: user });
