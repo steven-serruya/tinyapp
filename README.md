@@ -69,7 +69,7 @@ Made by Steven Serruya
 
 
 ## Dependencies
-1-Node.js
+1- Node.js
 2- Express.js
 3- EJS (Embedded JavaScript) for templating
 4- Cookie-parser for handling cookies
