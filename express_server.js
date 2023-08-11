@@ -158,15 +158,17 @@ app.post("/urls/:id", (req, res) => {
 
 // Delete a URL from the database
 
-app.post("/urls/:id/delete", (req, res) => {
+// Handle both GET and POST requests for deleting URLs
+app.all("/urls/:id/delete", (req, res) => {
   const id = req.params.id;
   if (!urlDatabase[id]) {
-    return res.status(404).send("URL not found.");
+    return res.render("error_url_not_exist", { errorMessage: "The URl does not exist!" });
   } else if (urlDatabase[id]) {
     delete urlDatabase[id];
   }
   res.redirect("/urls");
 });
+
 
 // Update the long URL of an existing URL
 
