@@ -79,3 +79,4 @@ Made by Steven Serruya
 Made by Steven Serruya
 
 ## Final Product
+[Screenshot of Login Page] (https://github.com/steven-serruya/tinyapp/blob/master/docs/header_with_no_login.png)
