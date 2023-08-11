@@ -201,12 +201,12 @@ app.post("/login", (req, res) => {
   const existingUser = getUserByEmail(email, users);
 
   if (!existingUser) {
-    return res.status(403).send("Email cannot be found!");
+    return res.render("error_email_not_found", { errorMessage: "Email not found!" });
 
   }
   // Compare the provided password with the hashed password using bcrypt
   if (!bcrypt.compareSync(password, existingUser.password)) {
-    return res.status(403).send("Incorrect password!");
+    return res.render("error_incorrect_password", { errorMessage: "Password is incorrect!" });
   }
 
 
