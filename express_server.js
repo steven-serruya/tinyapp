@@ -3,22 +3,32 @@
 const express = require("express");
 const app = express();
 const PORT = 8080;
+// Import helper functions and database
+
 const { generateRandomString, getUserById, getUserByEmail, urlsForUser } = require("./helpers");
 const { users, urlDatabase } = require("./database");
+
+// Import bcrypt and cookie-session
+
 const bcrypt = require("bcryptjs"); // Import bcriptjs
 const cookieSession = require("cookie-session"); // Import cookie-session
 
 
 //set the view engine to EJS 
+
 app.set("view engine", "ejs");
 
-// use of cookieSession
+// Use cookie-session for session management
+
 app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2'] // Provide secret keys for encryption
 }));
+// Use the bodyParser middleware to parse URL-encoded bodies
 
 app.use(express.urlencoded({ extended: true }));
+
+
 // Root route
 
 app.get("/", (req, res) => {

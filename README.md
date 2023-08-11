@@ -7,6 +7,8 @@
 - [Features](#features)
 - [Dependencies](#dependencies)
 - [Contributing](#contributing)
+- [Final Product](#FinalProduct)
+
 
 
 ## Installation
@@ -75,3 +77,5 @@ Made by Steven Serruya
 
 ## Contributing
 Made by Steven Serruya
+
+## Final Product
